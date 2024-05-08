@@ -1,0 +1,17 @@
+{
+    "editor.fontFamily": "consolas",
+    "editor.fontSize": 16.5,
+    "terminal.integrated.fontSize": 16,
+    "workbench.colorCustomizations": {
+        "[Monokai Pro]": {
+            "editor.background": "#000000",
+            "editorGutter.background": "#000000",
+            "sideBar.background": "#000000",
+            "activityBar.background": "#000000",
+            "statusBar.background": "#000000",
+            "tab.activeBackground": "#383838",
+            "editor.selectionBackground": "#545454"
+        },
+        "terminal.background": "#000000"
+    }
+}
