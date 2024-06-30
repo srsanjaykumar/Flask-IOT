@@ -3,8 +3,8 @@ from flask import Flask, redirect, url_for, request, render_template
 import os
 from src.User import User
 from src import check
-import math
-check()
+import base64
+
 app = Flask(__name__,template_folder='template')
 basename = '/iotcloud'
 
@@ -21,10 +21,14 @@ def helloworld():
    }
    return render_template('helloworld.html',data=d)
 
+@app.route(basename+"/dashboard")
+def dashboard():
+   return render_template("dashboard.html",data={})
 
-@app.route(basename+"/hello_world")
-def hello_world():
-   return render_template('helloworld.html')
+
+# @app.route(basename+"/hello_world")
+# def hello_world():
+#    return render_template('helloworld.html')
    
 
 @app.route(basename+'/')
@@ -35,57 +39,14 @@ def hello():
 def whoami():
    return os.popen('whoami').read()
 
-@app.route(basename+'/cpuinfo')
-def cpuinfo():
-   if isadmin() == "yes":
-      return redirect(url_for('error', errorcode=1000))
-   else:
-      return "<pre>"+os.popen('cat /proc/cpuinfo').read()+"</pre>"
-      
-@app.route(basename+"/error/<int:errorcode>")
-def error(errorcode):
-   if errorcode == 1000:
-      return "This app is running as root user, which is dangerous";
-   elif errorcode == 1001:
-      return "Some other error"
-   else:
-      return "Unknown error"
 
-@app.route(basename+'/echo')
-def echo_help():
-   return "Please use as /echo/{some string}"
-
-@app.route(basename+'/echo/<string>')
-def echo(string):
-   return "You said: {}".format(string)
-
-@app.route(basename+"/isadmin")
-def isadmin():
-   if whoami().strip() == "root":
-      return "yes"
-   else:
-      return "No, you are: "+whoami()
-   
-#dynamic routing
-@app.route(basename+'/pow/<int:a>/<int:b>')
-def power(a, b):
-   try:
-      return "Pow of {}, {}: {}".format(a, b, math.pow(a,b))
-   except:
-      return "This is too much... "
-   
-
-@app.route(basename+'/path/<path:a>')
-def path_test(a):
-      return("<code>"+a+"</code>")
-
-
-@app.route(basename+"/math/sqrt", methods=['GET', 'POST'])
-def math_sqrt():
-   return {
-      "result": str(math.sqrt(int(request.form['num'])))
-   }
-
+@app.route(basename+'/encode')
+def encode():
+   string = request.args['data']
+   print(string)
+   string = base64.b64decode(string)
+   return string
  
+
 if __name__ == '__main__':
-   app.run(debug=True,use_reloader=False, port=7000)
+   app.run(debug=True , port=7000)
